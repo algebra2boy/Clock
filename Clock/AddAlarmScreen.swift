@@ -63,6 +63,7 @@ struct AddAlarmScreen: View {
     func addNewAlarm() {
         let newAlarm = Alarm(date: date, label: label, isEnabled: false)
         alarms.append(newAlarm)
+        alarms.sort(by: { $0.date < $1.date })
         print(alarms)
         dismiss()
     }

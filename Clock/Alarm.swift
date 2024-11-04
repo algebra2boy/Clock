@@ -16,7 +16,7 @@ struct Alarm: Identifiable {
     init(id: UUID = UUID(), date: Date, label: String, isEnabled: Bool) {
         self.id = id
         self.date = date
-        self.label = label
+        self.label = label == "" ? "Alarm" : label
         self.isEnabled = isEnabled
     }
 }

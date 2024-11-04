@@ -9,39 +9,50 @@ import SwiftUI
 
 struct AlarmsScreen: View {
 
-    @State private var isAlarmOn: Bool = false
-
     @State private var presentAddAlarmScreen: Bool = false
 
-    @State private var alarms: [Alarm] = []
+    @State private var alarms: [Alarm] = [
+//        .init(date: Date.now, label: "Alarm", isEnabled: false),
+//        .init(date: Date.now, label: "HAPPY", isEnabled: false)
+    ]
 
     var body: some View {
         NavigationStack {
-            List($alarms) { alarm in
+            List {
 
                 Section {
 
-                    HStack {
-                        VStack(alignment: .leading, spacing: -5) {
-                            HStack(alignment: .lastTextBaseline, spacing: 2) {
-                                Text("\(convertedToHourMinute(alarm.date))")
-                                    .font(.system(size: 50, weight: .light))
-                                Text("\(convertedToAMPM(alarm.date))")
-                                    .font(.system(size: 30, weight: .light))
+                    ForEach($alarms) { alarm in
+
+                        HStack {
+
+                            VStack(alignment: .leading, spacing: -5) {
+
+                                HStack(alignment: .lastTextBaseline, spacing: 2) {
+                                    Text("\(convertedToHourMinute(alarm.date))")
+                                        .font(.system(size: 45, weight: .light))
+                                    Text("\(convertedToAMPM(alarm.date))")
+                                        .font(.system(size: 30, weight: .light))
+                                }
+
+                                Text("\(alarm.label.wrappedValue), every day")
+                                    .font(.system(size: 18, weight: .light))
                             }
+                            .foregroundStyle(alarm.isEnabled.wrappedValue ? .black.opacity(0.5) : .black)
 
-                            Text("Alarm, every day")
-                                .font(.system(size: 18, weight: .light))
+                            Spacer()
+
+                            Toggle("", isOn: alarm.isEnabled)
                         }
-                        .foregroundStyle(isAlarmOn ? .black.opacity(0.5) : .black)
-
-                        Spacer()
-
-                        Toggle("", isOn: $isAlarmOn)
+                    }
+                    .onDelete { indices in
+                        alarms.remove(atOffsets: indices)
                     }
 
                 } header: {
-                    Text("my clocks")
+                    if alarms.count > 0 {
+                        Text("my alarms")
+                    }
                 }
 
             }
