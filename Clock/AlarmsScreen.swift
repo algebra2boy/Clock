@@ -13,18 +13,20 @@ struct AlarmsScreen: View {
 
     @State private var presentAddAlarmScreen: Bool = false
 
+    @State private var alarms: [Alarm] = []
+
     var body: some View {
         NavigationStack {
-            List {
+            List($alarms) { alarm in
 
                 Section {
 
                     HStack {
                         VStack(alignment: .leading, spacing: -5) {
                             HStack(alignment: .lastTextBaseline, spacing: 2) {
-                                Text("8:00")
-                                    .font(.system(size: 55, weight: .light))
-                                Text("AM")
+                                Text("\(convertedToHourMinute(alarm.date))")
+                                    .font(.system(size: 50, weight: .light))
+                                Text("\(convertedToAMPM(alarm.date))")
                                     .font(.system(size: 30, weight: .light))
                             }
 
@@ -46,7 +48,7 @@ struct AlarmsScreen: View {
             .listStyle(.inset)
             .navigationTitle("Alarms")
             .sheet(isPresented: $presentAddAlarmScreen) {
-                AddAlarmScreen()
+                AddAlarmScreen(alarms: $alarms)
             }
             .toolbar {
 
@@ -63,6 +65,18 @@ struct AlarmsScreen: View {
                 }
             }
         }
+    }
+
+    private func convertedToHourMinute(_ date: Binding<Date>) -> String {
+        let hourMinuteFormatter = DateFormatter()
+        hourMinuteFormatter.dateFormat = "h:mm"
+        return hourMinuteFormatter.string(from: date.wrappedValue)
+    }
+
+    private func convertedToAMPM(_ date: Binding<Date>) -> String {
+        let amPMFormatter = DateFormatter()
+        amPMFormatter.dateFormat = "a"
+        return amPMFormatter.string(from: date.wrappedValue)
     }
 }
 

@@ -8,18 +8,42 @@
 import SwiftUI
 
 struct AddAlarmScreen: View {
+
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var date: Date = Date()
+
+    @State private var label: String = ""
+
+    @Binding var alarms: [Alarm]
+
     var body: some View {
         NavigationStack {
             VStack {
+                DatePicker("date picker", selection: $date, displayedComponents: .hourAndMinute)
+                    .datePickerStyle(.wheel)
+                    .labelsHidden()
 
+                List {
+                    HStack {
+                        Text("Label")
+                        TextField("Alarm", text: $label)
+                            .multilineTextAlignment(.trailing)
+                    }
+                    .listRowBackground(Color(UIColor.systemGray6))
+                }
+                .scrollContentBackground(.hidden)
+
+                Spacer()
             }
             .navigationTitle("Add Alarm")
             .navigationBarTitleDisplayMode(.inline)
+            .ignoresSafeArea(.all, edges: .bottom)
             .toolbar {
 
                 ToolbarItem(placement: .topBarLeading) {
                     Button {
-
+                        dismiss()
                     } label: {
                         Text("Cancel")
                     }
@@ -27,7 +51,7 @@ struct AddAlarmScreen: View {
 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-
+                        addNewAlarm()
                     } label: {
                         Text("Save")
                     }
@@ -35,8 +59,15 @@ struct AddAlarmScreen: View {
             }
         }
     }
+
+    func addNewAlarm() {
+        let newAlarm = Alarm(date: date, label: label, isEnabled: false)
+        alarms.append(newAlarm)
+        print(alarms)
+        dismiss()
+    }
 }
 
 #Preview {
-    AddAlarmScreen()
+    AddAlarmScreen(alarms: .constant([]))
 }
