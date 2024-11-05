@@ -12,8 +12,8 @@ struct AlarmsScreen: View {
     @State private var presentAddAlarmScreen: Bool = false
 
     @State private var alarms: [Alarm] = [
-//        .init(date: Date.now, label: "Alarm", isEnabled: false),
-//        .init(date: Date.now, label: "HAPPY", isEnabled: false)
+        .init(date: Date.now, label: "UMASS", isEnabled: false),
+        .init(date: Date.now, label: "HackUmass", isEnabled: false)
     ]
 
     var body: some View {
